@@ -18,7 +18,7 @@
             background-color: #111318;
             color: #ffffff;
             font-family: Arial, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         .navbar {
@@ -33,6 +33,7 @@
             padding-right: 19%;
             border-bottom: 1px solid #22252e;
             overflow: visible;
+            z-index: 10;
         }
 
         .nav-left {
@@ -91,20 +92,20 @@
             margin-left: 2px;
         }
 
-        /* Sam zrzut ekranu rozciągnięty na pełną szerokość z równymi marginesami po lewej i prawej */
+        /* Zrzut ekranu na całą szerokość i resztę wysokości pod paskiem */
         .main-content {
-            margin-left: 3%;
-            margin-right: 3%;
-            margin-top: 22px;
-            margin-bottom: 22px;
+            width: 100%;
+            height: calc(100vh - 66px);
+            margin: 0;
+            padding: 0;
         }
 
         .main-content img {
             width: 100%;
-            height: calc(100vh - 110px);
+            height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 12px;
+            border-radius: 0;
         }
     </style>
 </head>

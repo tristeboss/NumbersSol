@@ -91,24 +91,21 @@
             margin-left: 2px;
         }
 
-        /* Kwadratowy kontener zaczynający się od lewej krawędzi obszaru roboczego (poza miejscem na lewy pasek) */
+        /* Kontener dopasowany do białej ramki ze zdjęcia */
         .main-content {
-            margin-left: 19%; /* Zostawia miejsce po lewej dokładnie pod pasek boczny (wyrównane z logo) */
-            margin-top: 22px;
-            margin-bottom: 22px;
-            
-            /* Wysokość dopasowana tak, aby nie wychodził poza ekran poniżej paska */
-            height: calc(100vh - 110px); 
-            aspect-ratio: 1 / 1; /* Wymusza idealny kwadrat (szerokość = wysokość) */
-            max-width: calc(100vw - 19% - 24px); /* Zabezpieczenie na mniejsze ekrany */
+            margin-left: 14%;
+            margin-right: 3.5%;
+            margin-top: 28px;
+            margin-bottom: 24px;
         }
 
         .main-content img {
             width: 100%;
-            height: 100%;
+            /* 66px (navbar) + 28px (górny margines) + 24px (dolny margines) = 118px */
+            height: calc(100vh - 118px);
             object-fit: cover;
             display: block;
-            border-radius: 12px;
+            border-radius: 12px; /* Zaokrąglone wszystkie 4 rogi tak jak na podglądzie */
         }
     </style>
 </head>

@@ -1,1 +1,137 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Arena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background-color: #111318;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            position: relative;
+            width: 100%;
+            height: 66px;
+            background-color: #111318;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 22%;
+            padding-right: 22%;
+            border-bottom: 1px solid #22252e;
+            overflow: visible;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left img {
+            height: 90px;
+            width: auto;
+            display: block;
+        }
+
+        /* Dokładny środek całego ekranu */
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .balance-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 40px;
+            padding: 0 14px;
+            background-color: #1a1d24;
+            border: 1px solid #262a34;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .balance-box:hover {
+            background-color: #20242d;
+            border-color: #343946;
+        }
+
+        .balance-box img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .chevron {
+            color: #9aa0b0;
+            font-size: 11px;
+            margin-left: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .connect-btn {
+            height: 40px;
+            padding: 0 18px;
+            background-color: #ff1e1e;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .connect-btn:hover {
+            background-color: #e01919;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <img src="Nowy projekt (80).png" alt="Logo">
+        </div>
+
+        <div class="nav-center">
+            <div class="balance-box" id="balanceBox">
+                <img src="sol.png" alt="Ikona waluty">
+                <span id="balanceAmount">PLN 0.00</span>
+                <span class="chevron">⌄</span>
+            </div>
+        </div>
+
+    </header>
+
+
+
+</body>
+</html>

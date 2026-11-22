@@ -210,7 +210,7 @@
         </defs>
     </svg>
 
-    <!-- Ekran ładowania (5 sekund) -->
+    <!-- Ekran ładowania (2 sekundy) -->
     <div class="preloader" id="preloader">
         <div class="loader-spinner">
             <img src="sol.png" alt="Ładowanie...">
@@ -239,10 +239,10 @@
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
 
-            // Po 5 sekundach (5000 ms) płynnie ukryj ekran ładowania
+            // Po 2 sekundach (2000 ms) płynnie ukryj ekran ładowania
             setTimeout(() => {
                 preloader.classList.add("is-hidden");
-            }, 5000);
+            }, 2000);
         });
     </script>
 

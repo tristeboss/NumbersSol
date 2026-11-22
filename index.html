@@ -1,177 +1,155 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solana Numbers</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Arena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #0d0f14;
-      font-family: Arial, sans-serif;
-      color: #ffffff;
-    }
+        body {
+            background-color: #111318;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
 
-    .app {
-      display: flex;
-      flex-direction: column;
-      width: 100vw;
-      height: 100vh;
-    }
+        .navbar {
+            position: relative;
+            width: 100%;
+            height: 66px;
+            background-color: #111318;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 19%;
+            padding-right: 19%;
+            border-bottom: 1px solid #22252e;
+            overflow: visible;
+        }
 
-    .topbar {
-      height: 64px;
-      padding: 0 24px;
-      background: #14171f;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 14px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+        .nav-left img {
+            height: 72px;
+            width: auto;
+            display: block;
+        }
 
-    .sol-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      width: 24px;
-    }
+        /* Dokładny środek całego ekranu */
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+        }
 
-    .sol-bars span {
-      height: 4px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, #14f195, #9945ff);
-    }
+        .balance-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 40px;
+            padding: 0 14px;
+            background-color: #1a1d24;
+            border: 1px solid #262a34;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
 
-    .sol-bars span:nth-child(1) { transform: skewX(-20deg); }
-    .sol-bars span:nth-child(2) { transform: skewX(20deg); }
-    .sol-bars span:nth-child(3) { transform: skewX(-20deg); }
+        .balance-box:hover {
+            background-color: #20242d;
+            border-color: #343946;
+        }
 
-    .balance-box {
-      background: #1c212c;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 700;
-    }
+        .balance-box img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            display: block;
+        }
 
-    /* Rozciągnięte aż do samego dołu ekranu pod topbarem */
-    .game-stage {
-      position: relative;
-      flex: 1;
-      width: 100%;
-      height: calc(100vh - 64px);
-      overflow: hidden;
-      background: linear-gradient(180deg, #7ec8ff 0%, #3b8ef6 100%);
-    }
+        .chevron {
+            color: #9aa0b0;
+            font-size: 11px;
+            margin-left: 2px;
+        }
 
-    #gameCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-  </style>
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .connect-btn {
+            height: 40px;
+            padding: 0 18px;
+            background-color: #ff1e1e;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .connect-btn:hover {
+            background-color: #e01919;
+        }
+
+        /* Kontener rozciągnięty do samego dołu ekranu */
+        .main-content {
+            margin-left: 14%;
+            margin-right: 3%;
+            margin-top: 28px;
+            margin-bottom: 0;
+        }
+
+        .main-content img {
+            width: 100%;
+            height: calc(100vh - 94px);
+            object-fit: cover;
+            display: block;
+            border-radius: 12px 12px 0 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="sol-bars">
-          <span></span>
-          <span></span>
-          <span></span>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <img src="Nowy projekt (82).png" alt="Logo">
         </div>
-        <div>SOLANA<br />NUMBERS</div>
-      </div>
-      <div class="balance-box" id="balance">PLN 0.00</div>
+
+        <div class="nav-center">
+            <div class="balance-box" id="balanceBox">
+                <img src="sol.png" alt="Ikona waluty">
+                <span id="balanceAmount">PLN 0.00</span>
+                <span class="chevron">⌄</span>
+            </div>
+        </div>
     </header>
 
-    <main class="game-stage" id="gameStage">
-      <canvas id="gameCanvas"></canvas>
+    <main class="main-content">
+        <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
     </main>
-  </div>
 
-  <script>
-    const stage = document.getElementById('gameStage');
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let zoom = 1.08;
-
-    function resizeCanvas() {
-      const rect = stage.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.max(1, Math.round(rect.width * dpr));
-      canvas.height = Math.max(1, Math.round(rect.height * dpr));
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawScene(rect.width, rect.height);
-    }
-
-    function drawScene(w, h) {
-      ctx.clearRect(0, 0, w, h);
-
-      const sky = ctx.createLinearGradient(0, 0, 0, h);
-      sky.addColorStop(0, '#82cbff');
-      sky.addColorStop(1, '#3c8cf5');
-      ctx.fillStyle = sky;
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.save();
-      ctx.translate(w / 2, h * 0.78);
-      ctx.scale(zoom, zoom);
-
-      const roadTopW = 140;
-      const roadBotW = w * 0.65;
-      const roadTopY = -h * 0.62;
-      const roadBotY = h * 0.25;
-
-      ctx.beginPath();
-      ctx.moveTo(-roadTopW / 2, roadTopY);
-      ctx.lineTo(roadTopW / 2, roadTopY);
-      ctx.lineTo(roadBotW / 2, roadBotY);
-      ctx.lineTo(-roadBotW / 2, roadBotY);
-      ctx.closePath();
-      ctx.fillStyle = 'rgba(245, 249, 255, 0.92)';
-      ctx.fill();
-
-      ctx.strokeStyle = 'rgba(130, 175, 235, 0.45)';
-      ctx.lineWidth = 2;
-      for (let i = -2; i <= 2; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * 22, roadTopY);
-        ctx.lineTo(i * (roadBotW / 6), roadBotY);
-        ctx.stroke();
-      }
-
-      ctx.beginPath();
-      ctx.arc(0, roadTopY * 0.35, 7, 0, Math.PI * 2);
-      ctx.fillStyle = '#5a67f2';
-      ctx.fill();
-
-      ctx.restore();
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-  </script>
 </body>
 </html>

@@ -245,20 +245,28 @@
             color: #29b6f6;
         }
 
+        /* Wrapper dla pola input + przycisku SEE / HIDE po prawej */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 245px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
         .password-input {
             width: 100%;
-            max-width: 225px;
-            height: 36px;
+            height: 38px;
             background-color: #1c2432;
             border: 1px solid transparent;
             border-radius: 10px;
-            padding: 0 14px;
+            padding: 0 54px 0 14px;
             color: #ffffff;
             font-family: 'Rubik', sans-serif;
             font-size: 14px;
             text-align: center;
             outline: none;
-            margin-bottom: 18px;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -272,6 +280,29 @@
             animation: shakeInput 0.28s ease;
         }
 
+        .toggle-pass-btn {
+            position: absolute;
+            right: 8px;
+            height: 24px;
+            padding: 0 8px;
+            background-color: #263144;
+            border: none;
+            border-radius: 6px;
+            color: #29b6f6;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 10px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .toggle-pass-btn:hover {
+            background-color: #2f3c54;
+            color: #ffffff;
+        }
+
         @keyframes shakeInput {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -282,11 +313,12 @@
             min-height: 20px;
             font-family: 'Rubik', sans-serif;
             font-weight: 900;
-            font-size: 14px;
-            letter-spacing: 0.6px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
             color: #ff2a2a;
             text-transform: uppercase;
-            margin-top: -6px;
+            text-align: center;
+            margin-top: -4px;
             margin-bottom: 12px;
             opacity: 0;
             transition: opacity 0.15s ease;
@@ -361,72 +393,174 @@
     <main class="main-content">
         <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
 
-        <!-- Menu hasła -->
-        <div class="password-overlay" id="passwordOverlay">
-            <form class="password-card" id="passwordForm" autocomplete="off">
+        <!-- Nakładka Rejestracji / Logowania -->
+        <div class="password-overlay" id="authOverlay">
+
+            <!-- 1. FORMULARZ REJESTRACJI -->
+            <form class="password-card" id="registerForm" autocomplete="off">
                 <img src="sol.png" alt="Solana Logo" class="card-logo">
 
                 <label for="createPassword" class="field-label">CREATE A <span>PASSWORD</span></label>
-                <input type="password" id="createPassword" class="password-input" required>
+                <div class="input-wrapper">
+                    <input type="password" id="createPassword" class="password-input" required>
+                    <button type="button" class="toggle-pass-btn" data-target="createPassword">SEE</button>
+                </div>
 
                 <label for="confirmPassword" class="field-label">CONFIRM UR <span>PASSWORD</span></label>
-                <input type="password" id="confirmPassword" class="password-input" required>
+                <div class="input-wrapper">
+                    <input type="password" id="confirmPassword" class="password-input" required>
+                    <button type="button" class="toggle-pass-btn" data-target="confirmPassword">SEE</button>
+                </div>
 
-                <div class="wrong-text" id="wrongText">Wrong</div>
+                <div class="wrong-text" id="registerWrongText">Wrong</div>
 
                 <button type="submit" class="confirm-btn">CONFIRM</button>
             </form>
+
+            <!-- 2. FORMULARZ LOGOWANIA (pojawia się po rejestracji) -->
+            <form class="password-card" id="loginForm" autocomplete="off" style="display: none;">
+                <img src="sol.png" alt="Solana Logo" class="card-logo">
+
+                <label for="loginPassword" class="field-label">ENTER UR <span>PASSWORD</span></label>
+                <div class="input-wrapper">
+                    <input type="password" id="loginPassword" class="password-input" required>
+                    <button type="button" class="toggle-pass-btn" data-target="loginPassword">SEE</button>
+                </div>
+
+                <div class="wrong-text" id="loginWrongText">Wrong</div>
+
+                <button type="submit" class="confirm-btn">LOGIN</button>
+            </form>
+
         </div>
     </main>
 
     <script>
-        const AUTH_STORAGE_KEY = "solana_arena_auth_logged_in";
+        const SAVED_PASSWORD_KEY = "solana_arena_saved_password";
+        const LOGGED_IN_KEY = "solana_arena_is_logged_in";
 
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
-            const passwordOverlay = document.getElementById("passwordOverlay");
-            const passwordForm = document.getElementById("passwordForm");
+            const authOverlay = document.getElementById("authOverlay");
+
+            const registerForm = document.getElementById("registerForm");
             const createPassword = document.getElementById("createPassword");
             const confirmPassword = document.getElementById("confirmPassword");
-            const wrongText = document.getElementById("wrongText");
+            const registerWrongText = document.getElementById("registerWrongText");
 
-            // Jeśli użytkownik już się zalogował/potwierdził hasło, od razu ukryj menu hasła
-            if (localStorage.getItem(AUTH_STORAGE_KEY) === "true") {
-                passwordOverlay.classList.add("is-hidden");
+            const loginForm = document.getElementById("loginForm");
+            const loginPassword = document.getElementById("loginPassword");
+            const loginWrongText = document.getElementById("loginWrongText");
+
+            // Sprawdzenie aktualnego stanu przy wejściu/odświeżeniu strony
+            const savedPass = localStorage.getItem(SAVED_PASSWORD_KEY);
+            const isLoggedIn = localStorage.getItem(LOGGED_IN_KEY) === "true";
+
+            if (isLoggedIn && savedPass) {
+                // Już zalogowany -> strona od razu bez żadnych okienek
+                authOverlay.classList.add("is-hidden");
+            } else if (savedPass) {
+                // Zarejestrowany, ale jeszcze nie zalogowany -> pokaż logowanie
+                registerForm.style.display = "none";
+                loginForm.style.display = "flex";
             }
 
-            // Po 2 sekundach (2000 ms) płynnie ukryj ekran ładowania
+            // Po 2 sekundach płynnie ukryj ekran ładowania
             setTimeout(() => {
                 preloader.classList.add("is-hidden");
             }, 2000);
 
-            function clearErrorState() {
-                wrongText.classList.remove("is-visible");
-                confirmPassword.classList.remove("is-error");
-                createPassword.classList.remove("is-error");
+            // Przyciski SEE / HIDE przy każdym polu hasła
+            document.querySelectorAll(".toggle-pass-btn").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const input = document.getElementById(btn.dataset.target);
+                    if (input.type === "password") {
+                        input.type = "text";
+                        btn.textContent = "HIDE";
+                    } else {
+                        input.type = "password";
+                        btn.textContent = "SEE";
+                    }
+                });
+            });
+
+            // Walidacja hasła: min. 5 znaków, 1 wielka litera, 1 mała litera, 1 symbol
+            function isValidPassword(pass) {
+                const hasMinLength = pass.length >= 5;
+                const hasUpper = /[A-Z]/.test(pass);
+                const hasLower = /[a-z]/.test(pass);
+                const hasSymbol = /[^A-Za-z0-9]/.test(pass);
+                return hasMinLength && hasUpper && hasLower && hasSymbol;
             }
 
-            createPassword.addEventListener("input", clearErrorState);
-            confirmPassword.addEventListener("input", clearErrorState);
+            function showRegisterError(msg) {
+                registerWrongText.textContent = msg;
+                registerWrongText.classList.add("is-visible");
+                console.error("Register error:", msg);
+            }
 
-            passwordForm.addEventListener("submit", (e) => {
+            function clearRegisterError() {
+                registerWrongText.classList.remove("is-visible");
+                createPassword.classList.remove("is-error");
+                confirmPassword.classList.remove("is-error");
+            }
+
+            createPassword.addEventListener("input", clearRegisterError);
+            confirmPassword.addEventListener("input", clearRegisterError);
+
+            // Obsługa REJESTRACJI
+            registerForm.addEventListener("submit", (e) => {
                 e.preventDefault();
+                clearRegisterError();
 
                 const pass1 = createPassword.value;
                 const pass2 = confirmPassword.value;
 
-                if (!pass1 || pass1 !== pass2) {
-                    wrongText.classList.add("is-visible");
-                    confirmPassword.classList.add("is-error");
-                    confirmPassword.focus();
-                    console.error("Password confirmation mismatch: Wrong");
+                if (!isValidPassword(pass1)) {
+                    createPassword.classList.add("is-error");
+                    createPassword.focus();
+                    showRegisterError("WRONG (MIN 5 CHARS, A-Z, a-z, SYMBOL)");
                     return;
                 }
 
-                // Poprawne potwierdzenie hasła -> zapisz stan w localStorage i ukryj menu
-                clearErrorState();
-                localStorage.setItem(AUTH_STORAGE_KEY, "true");
-                passwordOverlay.classList.add("is-hidden");
+                if (pass1 !== pass2) {
+                    confirmPassword.classList.add("is-error");
+                    confirmPassword.focus();
+                    showRegisterError("WRONG");
+                    return;
+                }
+
+                // Zapisz hasło i przejdź do menu LOGOWANIA
+                localStorage.setItem(SAVED_PASSWORD_KEY, pass1);
+                registerForm.style.display = "none";
+                loginForm.style.display = "flex";
+                loginPassword.focus();
+            });
+
+            // Obsługa LOGOWANIA
+            loginPassword.addEventListener("input", () => {
+                loginWrongText.classList.remove("is-visible");
+                loginPassword.classList.remove("is-error");
+            });
+
+            loginForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const entered = loginPassword.value;
+                const stored = localStorage.getItem(SAVED_PASSWORD_KEY);
+
+                if (entered !== stored) {
+                    loginPassword.classList.add("is-error");
+                    loginWrongText.textContent = "WRONG";
+                    loginWrongText.classList.add("is-visible");
+                    loginPassword.focus();
+                    console.error("Login error: Wrong password");
+                    return;
+                }
+
+                // Poprawne logowanie -> zapamiętaj i otwórz stronę
+                localStorage.setItem(LOGGED_IN_KEY, "true");
+                authOverlay.classList.add("is-hidden");
             });
         });
     </script>

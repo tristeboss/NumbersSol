@@ -172,12 +172,6 @@
             display: block;
         }
 
-        .chevron {
-            color: #9aa0b0;
-            font-size: 11px;
-            margin-left: 2px;
-        }
-
         /* Główny obszar gry pod paskiem */
         .main-content {
             position: relative;
@@ -662,18 +656,17 @@
         <div class="nav-center">
             <div class="balance-box" id="balanceBox">
                 <img src="sol.png" alt="Ikona waluty">
-                <span id="balanceAmount">PLN 0.00</span>
-                <span class="chevron">⌄</span>
+                <span id="balanceAmount">SOL 0.00</span>
             </div>
         </div>
     </header>
 
     <main class="main-content">
-        <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu" class="bg-track">
+        <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu" class="bg-track" id="bgTrack">
 
         <!-- EKRAN GRY (odblokowywany po zalogowaniu) -->
         <div class="game-ui is-hidden" id="gameUi">
-            <!-- 0.00 zamiast SSSS na środku -->
+            <!-- 0.00 nad cyfrą na środku toru -->
             <div class="track-balance-pill">0.00</div>
 
             <!-- Komunikat błędu balansu -->
@@ -767,11 +760,14 @@
         const SAVED_PASSWORD_KEY = "solana_arena_saved_password";
         const LOGGED_IN_KEY = "solana_arena_is_logged_in";
         const WALLET_ADDRESS = "4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx";
+        const LOGGED_IN_BG = "gierka.png";
 
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
             const authOverlay = document.getElementById("authOverlay");
             const gameUi = document.getElementById("gameUi");
+            const bgTrack = document.getElementById("bgTrack");
+            const balanceAmount = document.getElementById("balanceAmount");
 
             const registerForm = document.getElementById("registerForm");
             const createPassword = document.getElementById("createPassword");
@@ -789,10 +785,18 @@
             const balanceAlert = document.getElementById("balanceAlert");
             let alertTimeout = null;
 
+            function setSolBalance(amount = 0) {
+                balanceAmount.textContent = `SOL ${Number(amount).toFixed(2)}`;
+            }
+
             function unlockGameScreen() {
+                bgTrack.src = LOGGED_IN_BG;
+                setSolBalance(0);
                 authOverlay.classList.add("is-hidden");
                 gameUi.classList.remove("is-hidden");
             }
+
+            setSolBalance(0);
 
             // Sprawdzenie stanu przy wejściu/odświeżeniu strony
             const savedPass = localStorage.getItem(SAVED_PASSWORD_KEY);

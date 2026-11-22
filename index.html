@@ -21,6 +21,93 @@
             overflow: hidden;
         }
 
+        /* Ekran wczytywania na środku */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #111318;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s ease;
+        }
+
+        .preloader.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-spinner {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Główna ikona sol.png */
+        .loader-spinner img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            display: block;
+            position: relative;
+            z-index: 2;
+            will-change: transform, filter;
+            animation: smoothSpinBlur 1.15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+        }
+
+        /* Dodatkowa warstwa poświaty / motion blur w ruchu */
+        .loader-spinner::after {
+            content: "";
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(153, 69, 255, 0.35) 0%, rgba(20, 241, 149, 0.18) 55%, transparent 75%);
+            filter: blur(10px);
+            z-index: 1;
+            animation: pulseGlow 1.15s ease-in-out infinite;
+        }
+
+        @keyframes smoothSpinBlur {
+            0% {
+                transform: rotate(0deg) scale(1);
+                filter: url(#motionBlurX) brightness(1.05);
+            }
+            25% {
+                transform: rotate(90deg) scale(1.03);
+                filter: url(#motionBlurY) brightness(1.12);
+            }
+            50% {
+                transform: rotate(180deg) scale(1);
+                filter: url(#motionBlurX) brightness(1.05);
+            }
+            75% {
+                transform: rotate(270deg) scale(1.03);
+                filter: url(#motionBlurY) brightness(1.12);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+                filter: url(#motionBlurX) brightness(1.05);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                transform: scale(0.92);
+                opacity: 0.65;
+            }
+            50% {
+                transform: scale(1.22);
+                opacity: 1;
+            }
+        }
+
         .navbar {
             position: relative;
             width: 100%;
@@ -111,6 +198,25 @@
 </head>
 <body>
 
+    <!-- Filtr SVG dla efektu motion blur w osi X oraz Y -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;" aria-hidden="true">
+        <defs>
+            <filter id="motionBlurX" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4.5 0.6" />
+            </filter>
+            <filter id="motionBlurY" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="0.6 4.5" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Ekran ładowania (5 sekund) -->
+    <div class="preloader" id="preloader">
+        <div class="loader-spinner">
+            <img src="sol.png" alt="Ładowanie...">
+        </div>
+    </div>
+
     <header class="navbar">
         <div class="nav-left">
             <img src="Nowy projekt (82).png" alt="Logo">
@@ -119,8 +225,8 @@
         <div class="nav-center">
             <div class="balance-box" id="balanceBox">
                 <img src="sol.png" alt="Ikona waluty">
-                <span id="balanceAmount">0.00</span>
-                <span class="chevron">≈0.00$</span>
+                <span id="balanceAmount">PLN 0.00</span>
+                <span class="chevron">⌄</span>
             </div>
         </div>
     </header>
@@ -128,6 +234,17 @@
     <main class="main-content">
         <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
     </main>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const preloader = document.getElementById("preloader");
+
+            // Po 5 sekundach (5000 ms) płynnie ukryj ekran ładowania
+            setTimeout(() => {
+                preloader.classList.add("is-hidden");
+            }, 5000);
+        });
+    </script>
 
 </body>
 </html>

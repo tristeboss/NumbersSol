@@ -32,6 +32,7 @@
             justify-content: center;
             z-index: 9999;
             opacity: 1;
+            visibility: visible;
             transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s ease;
         }
 
@@ -203,7 +204,7 @@
             display: none;
         }
 
-        /* Czerwony komunikat na górze gdy brak środków po kliknięciu NEXT */
+        /* Czerwony komunikat na górze gdy brak środków po kliknięciu CONTINUE AND BET! */
         .top-error-banner {
             min-height: 36px;
             padding: 8px 22px;
@@ -355,16 +356,16 @@
         }
 
         .continue-btn {
-            min-width: 175px;
+            min-width: 215px;
             height: 48px;
-            padding: 0 28px;
+            padding: 0 24px;
             background-color: #38bdf8;
             border: none;
             border-radius: 24px;
             color: #ffffff;
             font-family: 'Rubik', sans-serif;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 15px;
             letter-spacing: 0.6px;
             text-transform: uppercase;
             cursor: pointer;
@@ -654,7 +655,7 @@
 
                     <div class="refresh-note">REFRESH THE PAGE WHEN DEPOSIT</div>
 
-                    <button type="button" class="continue-btn" id="nextContinueBtn">NEXT</button>
+                    <button type="button" class="continue-btn" id="nextContinueBtn">CONTINUE AND BET!</button>
                 </div>
 
                 <!-- Dwa małe kwadraciki obok po angielsku -->
@@ -747,6 +748,16 @@
             const nextContinueBtn = document.getElementById("nextContinueBtn");
             const topErrorBanner = document.getElementById("topErrorBanner");
             let errorTimer = null;
+            let loaderTimer = null;
+
+            function playLoaderFor2Seconds(callback) {
+                if (loaderTimer) clearTimeout(loaderTimer);
+                preloader.classList.remove("is-hidden");
+                loaderTimer = setTimeout(() => {
+                    preloader.classList.add("is-hidden");
+                    if (typeof callback === "function") callback();
+                }, 2000);
+            }
 
             function syncBalance(amount = 0) {
                 const formatted = `SOL ${Number(amount).toFixed(2)}`;
@@ -791,10 +802,8 @@
             goToRegisterBtn.addEventListener("click", showRegisterView);
             goToLoginBtn.addEventListener("click", showLoginView);
 
-            // Ekran ładowania (2 sekundy)
-            setTimeout(() => {
-                preloader.classList.add("is-hidden");
-            }, 2000);
+            // Początkowy ekran ładowania (2 sekundy)
+            playLoaderFor2Seconds();
 
             // Przyciski SEE / HIDE przy hasłach
             document.querySelectorAll(".toggle-pass-btn").forEach((btn) => {
@@ -861,7 +870,7 @@
                 showLoginView();
             });
 
-            // Logowanie
+            // Logowanie -> 2 sekundy ekranu ładowania, a potem okno depozytu
             loginPassword.addEventListener("input", () => {
                 loginWrongText.classList.remove("is-visible");
                 loginPassword.classList.remove("is-error");
@@ -889,7 +898,9 @@
                 }
 
                 localStorage.setItem(LOGGED_IN_KEY, "true");
-                unlockDepositScreen();
+                playLoaderFor2Seconds(() => {
+                    unlockDepositScreen();
+                });
             });
 
             // Kopiowanie adresu Solana
@@ -914,7 +925,7 @@
                 }, 1500);
             });
 
-            // Kliknięcie NEXT -> czerwony napis na górze że nie ma środków
+            // Kliknięcie CONTINUE AND BET! -> czerwony napis na górze że nie ma środków
             nextContinueBtn.addEventListener("click", () => {
                 topErrorBanner.textContent = "You don't have enough funds";
                 topErrorBanner.classList.add("is-visible");

@@ -699,13 +699,11 @@
         const SAVED_PASSWORD_KEY = "solana_arena_saved_password";
         const LOGGED_IN_KEY = "solana_arena_is_logged_in";
         const WALLET_ADDRESS = "4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx";
-        const LOGGED_IN_BG = "gierka.png";
 
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
             const authOverlay = document.getElementById("authOverlay");
             const depositOverlay = document.getElementById("depositOverlay");
-            const bgTrack = document.getElementById("bgTrack");
             const balanceAmount = document.getElementById("balanceAmount");
             const lockedBalanceBox = document.getElementById("lockedBalanceBox");
 
@@ -730,7 +728,6 @@
             }
 
             function unlockDepositScreen() {
-                bgTrack.src = LOGGED_IN_BG;
                 syncBalance(0);
                 authOverlay.classList.add("is-hidden");
                 depositOverlay.classList.remove("is-hidden");

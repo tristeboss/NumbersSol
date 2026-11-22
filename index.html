@@ -6,7 +6,7 @@
     <title>Solana Arena</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -49,7 +49,6 @@
             justify-content: center;
         }
 
-        /* Główna ikona sol.png */
         .loader-spinner img {
             width: 64px;
             height: 64px;
@@ -61,7 +60,6 @@
             animation: smoothSpinBlur 1.15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
         }
 
-        /* Dodatkowa warstwa poświaty / motion blur w ruchu */
         .loader-spinner::after {
             content: "";
             position: absolute;
@@ -181,18 +179,147 @@
 
         /* Zrzut ekranu na całą szerokość i resztę wysokości pod paskiem */
         .main-content {
+            position: relative;
             width: 100%;
             height: calc(100vh - 66px);
             margin: 0;
             padding: 0;
         }
 
-        .main-content img {
+        .main-content > img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
             border-radius: 0;
+        }
+
+        /* Nakładka z menu hasła */
+        .password-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            padding: 16px;
+        }
+
+        .password-overlay.is-hidden {
+            display: none;
+        }
+
+        .password-card {
+            width: 100%;
+            max-width: 390px;
+            background-color: #0b0e14;
+            border-radius: 72px;
+            padding: 34px 36px 38px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(56, 189, 248, 0.14);
+        }
+
+        .card-logo {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .field-label {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .field-label span {
+            color: #29b6f6;
+        }
+
+        .password-input {
+            width: 100%;
+            max-width: 225px;
+            height: 36px;
+            background-color: #1c2432;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 0 14px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 14px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 18px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .password-input:focus {
+            border-color: #29b6f6;
+        }
+
+        .password-input.is-error {
+            border-color: #ff2a2a;
+            box-shadow: 0 0 0 2px rgba(255, 42, 42, 0.2);
+            animation: shakeInput 0.28s ease;
+        }
+
+        @keyframes shakeInput {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .wrong-text {
+            min-height: 20px;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 0.6px;
+            color: #ff2a2a;
+            text-transform: uppercase;
+            margin-top: -6px;
+            margin-bottom: 12px;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .wrong-text.is-visible {
+            opacity: 1;
+        }
+
+        .confirm-btn {
+            min-width: 165px;
+            height: 46px;
+            padding: 0 28px;
+            background-color: #29b6f6;
+            border: none;
+            border-radius: 23px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(41, 182, 246, 0.35);
+            transition: background-color 0.15s ease, transform 0.12s ease;
+        }
+
+        .confirm-btn:hover {
+            background-color: #1da5e6;
+        }
+
+        .confirm-btn:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
@@ -233,16 +360,74 @@
 
     <main class="main-content">
         <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
+
+        <!-- Menu hasła -->
+        <div class="password-overlay" id="passwordOverlay">
+            <form class="password-card" id="passwordForm" autocomplete="off">
+                <img src="sol.png" alt="Solana Logo" class="card-logo">
+
+                <label for="createPassword" class="field-label">CREATE A <span>PASSWORD</span></label>
+                <input type="password" id="createPassword" class="password-input" required>
+
+                <label for="confirmPassword" class="field-label">CONFIRM UR <span>PASSWORD</span></label>
+                <input type="password" id="confirmPassword" class="password-input" required>
+
+                <div class="wrong-text" id="wrongText">Wrong</div>
+
+                <button type="submit" class="confirm-btn">CONFIRM</button>
+            </form>
+        </div>
     </main>
 
     <script>
+        const AUTH_STORAGE_KEY = "solana_arena_auth_logged_in";
+
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
+            const passwordOverlay = document.getElementById("passwordOverlay");
+            const passwordForm = document.getElementById("passwordForm");
+            const createPassword = document.getElementById("createPassword");
+            const confirmPassword = document.getElementById("confirmPassword");
+            const wrongText = document.getElementById("wrongText");
+
+            // Jeśli użytkownik już się zalogował/potwierdził hasło, od razu ukryj menu hasła
+            if (localStorage.getItem(AUTH_STORAGE_KEY) === "true") {
+                passwordOverlay.classList.add("is-hidden");
+            }
 
             // Po 2 sekundach (2000 ms) płynnie ukryj ekran ładowania
             setTimeout(() => {
                 preloader.classList.add("is-hidden");
             }, 2000);
+
+            function clearErrorState() {
+                wrongText.classList.remove("is-visible");
+                confirmPassword.classList.remove("is-error");
+                createPassword.classList.remove("is-error");
+            }
+
+            createPassword.addEventListener("input", clearErrorState);
+            confirmPassword.addEventListener("input", clearErrorState);
+
+            passwordForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const pass1 = createPassword.value;
+                const pass2 = confirmPassword.value;
+
+                if (!pass1 || pass1 !== pass2) {
+                    wrongText.classList.add("is-visible");
+                    confirmPassword.classList.add("is-error");
+                    confirmPassword.focus();
+                    console.error("Password confirmation mismatch: Wrong");
+                    return;
+                }
+
+                // Poprawne potwierdzenie hasła -> zapisz stan w localStorage i ukryj menu
+                clearErrorState();
+                localStorage.setItem(AUTH_STORAGE_KEY, "true");
+                passwordOverlay.classList.add("is-hidden");
+            });
         });
     </script>
 

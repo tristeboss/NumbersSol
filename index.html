@@ -17,8 +17,9 @@
         body {
             background-color: #111318;
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Rubik', Arial, sans-serif;
             overflow: hidden;
+            user-select: none;
         }
 
         /* Ekran wczytywania na środku */
@@ -118,7 +119,7 @@
             padding-right: 19%;
             border-bottom: 1px solid #22252e;
             overflow: visible;
-            z-index: 10;
+            z-index: 30;
         }
 
         .nav-left {
@@ -177,24 +178,302 @@
             margin-left: 2px;
         }
 
-        /* Zrzut ekranu na całą szerokość i resztę wysokości pod paskiem */
+        /* Główny obszar gry pod paskiem */
         .main-content {
             position: relative;
             width: 100%;
             height: calc(100vh - 66px);
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
 
-        .main-content > img {
+        .main-content > img.bg-track {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 0;
         }
 
-        /* Nakładka z menu hasła */
+        /* =========================================
+           INTERFEJS GRY (WIDOCZNY PO ZALOGOWANIU)
+           ========================================= */
+        .game-ui {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 20px 24px 26px;
+        }
+
+        .game-ui.is-hidden {
+            display: none;
+        }
+
+        /* Kapsuła 0.00 nad cyfrą na środku toru */
+        .track-balance-pill {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1e2430;
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 20px;
+            padding: 4px 18px;
+            border-radius: 999px;
+            letter-spacing: 0.6px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+        }
+
+        /* Komunikat błędu nad przyciskiem BET */
+        .balance-alert {
+            min-height: 28px;
+            margin-bottom: 10px;
+            padding: 6px 18px;
+            background-color: rgba(11, 14, 20, 0.92);
+            border: 1px solid #ff2a2a;
+            border-radius: 999px;
+            color: #ff3b3b;
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 0.4px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(6px);
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .balance-alert.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Duży niebieski przycisk BET */
+        .big-bet-btn {
+            width: 310px;
+            height: 76px;
+            background-color: #46c3f6;
+            border: none;
+            border-radius: 38px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+            transition: background-color 0.15s ease, transform 0.12s ease;
+        }
+
+        .big-bet-btn:hover {
+            background-color: #35b6ec;
+        }
+
+        .big-bet-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Dolny czarny panel */
+        .bottom-bar {
+            width: 100%;
+            max-width: 1180px;
+            min-height: 128px;
+            background-color: #07090d;
+            border-radius: 64px;
+            padding: 18px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Lewa kolumna: YOUR SOLANA ADDRES + pole z adresem + COPY */
+        .address-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex: 1.25;
+        }
+
+        .address-title {
+            font-weight: 900;
+            font-size: 19px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .address-title span {
+            color: #29b6f6;
+        }
+
+        .address-box-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .address-pill {
+            flex: 1;
+            height: 36px;
+            background-color: #1f2836;
+            border-radius: 10px;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            color: #d6e4f0;
+            font-size: 11.5px;
+            font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            user-select: all;
+        }
+
+        .copy-btn {
+            height: 36px;
+            padding: 0 14px;
+            background-color: #29b6f6;
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: #1da5e6;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.96);
+        }
+
+        .copy-btn.is-copied {
+            background-color: #16a34a;
+        }
+
+        /* Środkowa sekcja: MIN/MAX DEPOSIT + WARNING */
+        .limits-warning-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex: 1.5;
+        }
+
+        .limits-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .limits-col span {
+            color: #19e619;
+        }
+
+        .warning-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 240px;
+        }
+
+        .warning-title {
+            color: #ff1e1e;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
+        }
+
+        .warning-desc {
+            color: #ff1e1e;
+            font-weight: 900;
+            font-size: 9.5px;
+            line-height: 1.35;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        /* Prawa sekcja: BET: [ 0.00 ] + logo Solany */
+        .bet-input-section {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 22px;
+            flex: 1;
+        }
+
+        .bet-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bet-label {
+            font-weight: 900;
+            font-size: 18px;
+            letter-spacing: 0.6px;
+            color: #ffffff;
+        }
+
+        .bet-amount-box {
+            width: 112px;
+            height: 36px;
+            background-color: #1f2836;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 900;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .bet-amount-box:hover {
+            border-color: #ff2a2a;
+            background-color: #253040;
+        }
+
+        .bottom-sol-logo {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* =========================================
+           NAKŁADKA Z MENU HASŁA
+           ========================================= */
         .password-overlay {
             position: absolute;
             inset: 0;
@@ -245,7 +524,6 @@
             color: #29b6f6;
         }
 
-        /* Wrapper dla pola input + przycisku SEE / HIDE po prawej */
         .input-wrapper {
             position: relative;
             width: 100%;
@@ -391,7 +669,57 @@
     </header>
 
     <main class="main-content">
-        <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
+        <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu" class="bg-track">
+
+        <!-- EKRAN GRY (odblokowywany po zalogowaniu) -->
+        <div class="game-ui is-hidden" id="gameUi">
+            <!-- 0.00 zamiast SSSS na środku -->
+            <div class="track-balance-pill">0.00</div>
+
+            <!-- Komunikat błędu balansu -->
+            <div class="balance-alert" id="balanceAlert">You dont have enough balance</div>
+
+            <!-- Główny przycisk BET -->
+            <button type="button" class="big-bet-btn" id="mainBetBtn">BET</button>
+
+            <!-- Dolny panel -->
+            <div class="bottom-bar">
+                <!-- Lewa sekcja: Adres Solana + przycisk COPY -->
+                <div class="address-section">
+                    <div class="address-title">YOUR <span>SOLANA</span> ADDRES</div>
+                    <div class="address-box-row">
+                        <div class="address-pill" id="solanaAddress" title="4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx">
+                            4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx
+                        </div>
+                        <button type="button" class="copy-btn" id="copyAddressBtn">COPY</button>
+                    </div>
+                </div>
+
+                <!-- Środek: MIN/MAX DEPOSIT + WARNING -->
+                <div class="limits-warning-section">
+                    <div class="limits-col">
+                        <div>MIN DEPOSIT: <span>0.05</span></div>
+                        <div>MAX DEPOSIT: <span>0.5</span></div>
+                    </div>
+
+                    <div class="warning-col">
+                        <div class="warning-title">!WARNING!</div>
+                        <div class="warning-desc">
+                            IF YOU DEPOSIT MORE THAN THE MAXIMUM OR LESS THAN THE MINIMUM YOU WILL RECEIVE NOTHING.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prawa sekcja: BET 0.00 + Logo Solany -->
+                <div class="bet-input-section">
+                    <div class="bet-col">
+                        <div class="bet-label">BET:</div>
+                        <button type="button" class="bet-amount-box" id="betTabBox">0.00</button>
+                    </div>
+                    <img src="sol.png" alt="Solana" class="bottom-sol-logo">
+                </div>
+            </div>
+        </div>
 
         <!-- Nakładka Rejestracji / Logowania -->
         <div class="password-overlay" id="authOverlay">
@@ -417,7 +745,7 @@
                 <button type="submit" class="confirm-btn">CONFIRM</button>
             </form>
 
-            <!-- 2. FORMULARZ LOGOWANIA (pojawia się po rejestracji) -->
+            <!-- 2. FORMULARZ LOGOWANIA -->
             <form class="password-card" id="loginForm" autocomplete="off" style="display: none;">
                 <img src="sol.png" alt="Solana Logo" class="card-logo">
 
@@ -438,10 +766,12 @@
     <script>
         const SAVED_PASSWORD_KEY = "solana_arena_saved_password";
         const LOGGED_IN_KEY = "solana_arena_is_logged_in";
+        const WALLET_ADDRESS = "4VCRoo3SLogGjANDAoFWhuQmtrc6TsXeBbKaX5yCmXfx";
 
         window.addEventListener("DOMContentLoaded", () => {
             const preloader = document.getElementById("preloader");
             const authOverlay = document.getElementById("authOverlay");
+            const gameUi = document.getElementById("gameUi");
 
             const registerForm = document.getElementById("registerForm");
             const createPassword = document.getElementById("createPassword");
@@ -452,25 +782,35 @@
             const loginPassword = document.getElementById("loginPassword");
             const loginWrongText = document.getElementById("loginWrongText");
 
-            // Sprawdzenie aktualnego stanu przy wejściu/odświeżeniu strony
+            // Elementy widoku gry
+            const copyAddressBtn = document.getElementById("copyAddressBtn");
+            const mainBetBtn = document.getElementById("mainBetBtn");
+            const betTabBox = document.getElementById("betTabBox");
+            const balanceAlert = document.getElementById("balanceAlert");
+            let alertTimeout = null;
+
+            function unlockGameScreen() {
+                authOverlay.classList.add("is-hidden");
+                gameUi.classList.remove("is-hidden");
+            }
+
+            // Sprawdzenie stanu przy wejściu/odświeżeniu strony
             const savedPass = localStorage.getItem(SAVED_PASSWORD_KEY);
             const isLoggedIn = localStorage.getItem(LOGGED_IN_KEY) === "true";
 
             if (isLoggedIn && savedPass) {
-                // Już zalogowany -> strona od razu bez żadnych okienek
-                authOverlay.classList.add("is-hidden");
+                unlockGameScreen();
             } else if (savedPass) {
-                // Zarejestrowany, ale jeszcze nie zalogowany -> pokaż logowanie
                 registerForm.style.display = "none";
                 loginForm.style.display = "flex";
             }
 
-            // Po 2 sekundach płynnie ukryj ekran ładowania
+            // Ekran ładowania (2 sekundy)
             setTimeout(() => {
                 preloader.classList.add("is-hidden");
             }, 2000);
 
-            // Przyciski SEE / HIDE przy każdym polu hasła
+            // Przyciski SEE / HIDE przy hasłach
             document.querySelectorAll(".toggle-pass-btn").forEach((btn) => {
                 btn.addEventListener("click", () => {
                     const input = document.getElementById(btn.dataset.target);
@@ -496,7 +836,6 @@
             function showRegisterError(msg) {
                 registerWrongText.textContent = msg;
                 registerWrongText.classList.add("is-visible");
-                console.error("Register error:", msg);
             }
 
             function clearRegisterError() {
@@ -530,7 +869,6 @@
                     return;
                 }
 
-                // Zapisz hasło i przejdź do menu LOGOWANIA
                 localStorage.setItem(SAVED_PASSWORD_KEY, pass1);
                 registerForm.style.display = "none";
                 loginForm.style.display = "flex";
@@ -554,14 +892,48 @@
                     loginWrongText.textContent = "WRONG";
                     loginWrongText.classList.add("is-visible");
                     loginPassword.focus();
-                    console.error("Login error: Wrong password");
                     return;
                 }
 
-                // Poprawne logowanie -> zapamiętaj i otwórz stronę
                 localStorage.setItem(LOGGED_IN_KEY, "true");
-                authOverlay.classList.add("is-hidden");
+                unlockGameScreen();
             });
+
+            // Kopiowanie adresu Solana
+            copyAddressBtn.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(WALLET_ADDRESS);
+                } catch (err) {
+                    const tempInput = document.createElement("input");
+                    tempInput.value = WALLET_ADDRESS;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(tempInput);
+                }
+
+                copyAddressBtn.textContent = "COPIED!";
+                copyAddressBtn.classList.add("is-copied");
+
+                setTimeout(() => {
+                    copyAddressBtn.textContent = "COPY";
+                    copyAddressBtn.classList.remove("is-copied");
+                }, 1500);
+            });
+
+            // Komunikat "You dont have enough balance" po kliknięciu BET lub zakładki BET 0.00
+            function showNoBalanceWarning() {
+                balanceAlert.textContent = "You dont have enough balance";
+                balanceAlert.classList.add("is-visible");
+
+                if (alertTimeout) clearTimeout(alertTimeout);
+                alertTimeout = setTimeout(() => {
+                    balanceAlert.classList.remove("is-visible");
+                }, 2600);
+            }
+
+            mainBetBtn.addEventListener("click", showNoBalanceWarning);
+            betTabBox.addEventListener("click", showNoBalanceWarning);
         });
     </script>
 

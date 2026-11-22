@@ -6,7 +6,7 @@
     <title>Solana Arena</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -91,21 +91,45 @@
             margin-left: 2px;
         }
 
-        /* Kontener dopasowany do białej ramki ze zdjęcia */
+        /* Główny kontener łączący lewy panel + obszar gry */
+        .game-wrapper {
+            display: flex;
+            margin-left: 3%;
+            margin-right: 3%;
+            margin-top: 22px;
+            margin-bottom: 22px;
+            height: calc(100vh - 110px);
+            background-color: #181b22;
+            border: 1px solid #22252e;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* Dorobiony panel boczny (zaznaczony białą ramką) */
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            height: 100%;
+            background-color: #181b22;
+            border-right: 1px solid #22252e;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Obszar główny (obrazek po prawej stronie panelu) */
         .main-content {
-            margin-left: 14%;
-            margin-right: 3.5%;
-            margin-top: 28px;
-            margin-bottom: 24px;
+            flex: 1;
+            height: 100%;
+            position: relative;
         }
 
         .main-content img {
             width: 100%;
-            /* 66px (navbar) + 28px (górny margines) + 24px (dolny margines) = 118px */
-            height: calc(100vh - 118px);
+            height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 12px; /* Zaokrąglone wszystkie 4 rogi tak jak na podglądzie */
         }
     </style>
 </head>
@@ -125,9 +149,17 @@
         </div>
     </header>
 
-    <main class="main-content">
-        <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
-    </main>
+    <div class="game-wrapper">
+        <!-- Dorobiony panel boczny z lewej strony -->
+        <aside class="sidebar">
+            <!-- Tutaj możesz wrzucić przyciski / stawki / opcje gry -->
+        </aside>
+
+        <!-- Główny ekran gry -->
+        <main class="main-content">
+            <img src="Zrzut ekranu 2026-11-22 155605.png" alt="Zrzut ekranu">
+        </main>
+    </div>
 
 </body>
 </html>
